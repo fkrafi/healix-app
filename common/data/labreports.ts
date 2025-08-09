@@ -2,9 +2,10 @@ import { LabReport } from "../types";
 import { APPOINTMENT_1 } from "./appointments";
 import { CBC, LFT } from "./medicaltest";
 import { PRESCRIPTION_1 } from "./prescriptions";
+import { v4 as uuidv4} from 'uuid';
 
 export const LABREPORT_CBC: LabReport = {
-    id: 1,
+    id: uuidv4(),
     appointment: APPOINTMENT_1,
     medicalTest: CBC,
     prescription: PRESCRIPTION_1,
@@ -13,7 +14,7 @@ export const LABREPORT_CBC: LabReport = {
 };
 
 export const LABREPORT_LFT: LabReport = {
-    id: 2,
+    id: uuidv4(),
     appointment: APPOINTMENT_1,
     medicalTest: LFT,
     prescription: PRESCRIPTION_1,

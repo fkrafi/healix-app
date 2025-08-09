@@ -1,8 +1,10 @@
 import { labRecords } from "../common/data/labreports";
-import { prescriptionsRecords, radiologyRecords, vitalRecords } from "../common/data/records";
+import { prescriptions } from "../common/data/prescriptions";
+import { radiologyRecords } from "../common/data/radiologyreports";
+import { vitalRecords } from "../common/data/vitals";
 
 export async function getPrescriptions() {
-    return Promise.resolve(prescriptionsRecords);
+    return Promise.resolve(prescriptions);
 }
 
 export async function getLabReports() {

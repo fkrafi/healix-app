@@ -1,7 +1,8 @@
 import type { Doctor } from '../types';
+import { v4 as uuidv4} from 'uuid';
 
 export const DOCTOR_ALICE_SMITH: Doctor = {
-    id: 1,
+    id: uuidv4(),
     name: 'Dr. Alice Smith',
     contact: 'alice.smith@healix.com',
     department: 'Cardiology',
@@ -13,7 +14,7 @@ export const DOCTOR_ALICE_SMITH: Doctor = {
 };
 
 export const DOCTOR_BOB_JOHNSON: Doctor = {
-    id: 2,
+    id: uuidv4(),
     name: 'Dr. Bob Johnson',
     contact: 'bob.johnson@healix.com',
     department: 'Neurology',
@@ -25,7 +26,7 @@ export const DOCTOR_BOB_JOHNSON: Doctor = {
 };
 
 export const DOCTOR_CAROL_LEE: Doctor = {
-    id: 3,
+    id: uuidv4(),
     name: 'Dr. Carol Lee',
     contact: 'carol.lee@healix.com',
     department: 'Pediatrics',
@@ -37,7 +38,7 @@ export const DOCTOR_CAROL_LEE: Doctor = {
 };
 
 export const DOCTOR_DAVID_KIM: Doctor = {
-    id: 4,
+    id: uuidv4(),
     name: 'Dr. David Kim',
     contact: 'david.kim@healix.com',
     department: 'Orthopedics',
@@ -49,7 +50,7 @@ export const DOCTOR_DAVID_KIM: Doctor = {
 };
 
 export const DOCTOR_EMMA_PATEL: Doctor = {
-    id: 5,
+    id: uuidv4(),
     name: 'Dr. Emma Patel',
     contact: 'emma.patel@healix.com',
     department: 'Dermatology',

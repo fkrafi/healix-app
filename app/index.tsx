@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Header from '../components/common/Header';
 import PatientCard from '../components/home/PatientCard';
-import HealthOverview from '../components/health/HealthOverview';
+import HealthOverview from '../components/home/HealthOverview';
 import AppointmentsSection from '../components/appointments/AppointmentsSection';
 import QuickActions from '../components/home/QuickActions';
 import RecentActivity from '../components/home/RecentActivity';

@@ -1,7 +1,8 @@
 import { Patient } from '../types';
+import { v4 as uuidv4} from 'uuid';
 
 export const patient: Patient = {
-    id: 1,
+    id: uuidv4(),
     name: "John Doe",
     age: 30,
     gender: "male",

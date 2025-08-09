@@ -1,32 +1,33 @@
 import { MedicalTest } from "../types";
+import { v4 as uuidv4} from 'uuid';
 
 
 export const CBC: MedicalTest = {
-    id: 1,
+    id: uuidv4(),
     name: "CBC",
     type: "Lab"
 }
 
 export const LFT: MedicalTest = {
-    id: 2,
+    id: uuidv4(),
     name: "Liver Function Test",
     type: "Lab"
 };
 
 export const CHEST_X_RAY: MedicalTest = {
-    id: 3,
+    id: uuidv4(),
     name: "Chest X-Ray",
     type: "Radiology"
 };
 
 export const KNEE_MRI: MedicalTest = {
-    id: 4,
+    id: uuidv4(),
     name: "Knee MRI",
     type: "Radiology"
 };
 
 export const ABDOMINAL_ULTRASOUND: MedicalTest = {
-    id: 5,
+    id: uuidv4(),
     name: "Abdominal Ultrasound",
     type: "Radiology"
 };

@@ -3,7 +3,7 @@
 export type Department = 'Cardiology' | 'Dermatology' | 'Neurology' | 'Pediatrics' | 'Oncology' | 'General Medicine' | 'Orthopedics' | 'Psychiatry' | 'Gynecology';
 
 export interface Doctor {
-    id: number;
+    id: string;
     name: string;
     contact?: string;
     email?: string;
@@ -16,7 +16,7 @@ export interface Doctor {
 }
 
 export interface Patient {
-    id: number;
+    id: string;
     name: string;
     age: number;
     gender: string;
@@ -29,7 +29,7 @@ export interface Patient {
 }
 
 export interface Vital {
-    id: number;
+    id: string;
     date: string;
     bloodPressure: string;
     heartRate: string;
@@ -38,7 +38,7 @@ export interface Vital {
 }
 
 export interface Appointment {
-    id: number;
+    id: string;
     patient: Patient;
     doctor: Doctor;
     scheduledAt: Date;
@@ -46,7 +46,7 @@ export interface Appointment {
 }
 
 export interface Medication {
-    id: number;
+    id: string;
     name: string;
     dosage: string;
     frequency: string;
@@ -56,21 +56,19 @@ export interface Medication {
 }
 
 export interface Prescription {
-    id: number;
-    doctor: string;
-    title: string;
-    date: string;
+    id: string;
+    appointment: Appointment;
     medications?: Medication[];
 }
 
 export interface MedicalTest {
-    id: number;
+    id: string;
     name: string;
     type: 'Lab' | 'Radiology';
 }
 
 export interface Report {
-    id: number;
+    id: string;
     appointment: Appointment;
     medicalTest: MedicalTest;
     performedAt: Date;
@@ -79,7 +77,7 @@ export interface Report {
 }
 
 export interface Report {
-    id: number;
+    id: string;
     medicalTest: MedicalTest;
     prescription: Prescription;
     performedAt: Date;

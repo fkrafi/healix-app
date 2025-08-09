@@ -1,4 +1,5 @@
 import { Tabs } from 'expo-router';
+import 'react-native-get-random-values';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState, createContext, useContext } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

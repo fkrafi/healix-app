@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native';
 import { VitalCard } from '../common';
 import { getVitals } from '../../services/recordsService';
 import { Vital } from '../../common/types';
+import { VITALS_CATEGORY } from '../../common/constants';
 
 export default function VitalsTab() {
     const [vitals, setVitals] = React.useState<Vital[]>([]);
@@ -17,18 +18,19 @@ export default function VitalsTab() {
 
     return (
         <ScrollView style={{ paddingHorizontal: 16, paddingVertical: 8 }} showsVerticalScrollIndicator={false}>
-            {vitals.map((record, idx) => (
+            {vitals.map((record) => (
                 <VitalCard
                     key={record.id}
                     visit={{
-                        id: idx,
+                        id: record.id,
                         date: record.date,
                         bloodPressure: record.bloodPressure,
                         heartRate: record.heartRate,
                         temperature: record.temperature,
                         weight: record.weight,
                     }}
-                    style={{ width: '100%', marginBottom: 16 }}
+                    borderColor={VITALS_CATEGORY.color}
+                    width={'100%'}
                 />
             ))}
         </ScrollView>

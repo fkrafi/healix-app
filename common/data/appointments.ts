@@ -1,12 +1,13 @@
 import { Appointment, Patient } from '../types';
 import { DOCTOR_ALICE_SMITH, DOCTOR_BOB_JOHNSON } from './doctors';
+import { v4 as uuidv4} from 'uuid';
 
-const PATIENT_JOHN_DOE: Patient = { id: 1, name: 'John Doe', age: 30, gender: 'male' };
-const PATIENT_JANE_SMITH: Patient = { id: 2, name: 'Jane Smith', age: 25, gender: 'female' };
-const PATIENT_SAM_LEE: Patient = { id: 3, name: 'Sam Lee', age: 40, gender: 'male' };
+const PATIENT_JOHN_DOE: Patient = { id: uuidv4(), name: 'John Doe', age: 30, gender: 'male' };
+const PATIENT_JANE_SMITH: Patient = { id: uuidv4(), name: 'Jane Smith', age: 25, gender: 'female' };
+const PATIENT_SAM_LEE: Patient = { id: uuidv4(), name: 'Sam Lee', age: 40, gender: 'male' };
 
 export const APPOINTMENT_1: Appointment = {
-  id: 1,
+  id: uuidv4(),
   patient: PATIENT_JOHN_DOE,
   doctor: DOCTOR_ALICE_SMITH,
   scheduledAt: new Date('2024-06-10T09:00:00Z'),
@@ -14,7 +15,7 @@ export const APPOINTMENT_1: Appointment = {
 };
 
 export const APPOINTMENT_2: Appointment = {
-  id: 2,
+  id: uuidv4(),
   patient: PATIENT_JANE_SMITH,
   doctor: DOCTOR_BOB_JOHNSON,
   scheduledAt: new Date('2024-06-11T11:30:00Z'),
@@ -22,7 +23,7 @@ export const APPOINTMENT_2: Appointment = {
 };
 
 export const APPOINTMENT_3: Appointment = {
-  id: 3,
+  id: uuidv4(),
   patient: PATIENT_SAM_LEE,
   doctor: DOCTOR_ALICE_SMITH,
   scheduledAt: new Date('2024-06-12T14:00:00Z'),
