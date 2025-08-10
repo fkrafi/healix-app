@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { ScrollView } from 'react-native';
-import { VitalCard } from '../common';
-import { getVitals } from '../../services/recordsService';
-import { Vital } from '../../common/types';
 import { VITALS_CATEGORY } from '../../common/constants';
+import { Vital } from '../../common/types';
+import { getVitals } from '../../services/recordsService';
+import { VitalCard } from '../common';
 
 export default function VitalsTab() {
     const [vitals, setVitals] = React.useState<Vital[]>([]);
@@ -11,10 +11,6 @@ export default function VitalsTab() {
     useEffect(() => {
         getVitals().then((vitals: Vital[]) => setVitals(vitals));
     }, []);
-
-    useEffect(() => {
-        console.log(vitals);
-    }, [vitals]);
 
     return (
         <ScrollView style={{ paddingHorizontal: 16, paddingVertical: 8 }} showsVerticalScrollIndicator={false}>

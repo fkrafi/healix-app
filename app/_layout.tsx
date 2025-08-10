@@ -38,13 +38,21 @@ export default function TabLayout() {
 
     useEffect(() => {
         AsyncStorage.getItem('currentPatient')
-            .then((patient: Patient | null) => {
-                if (patient) {
-                    setPatient(patient);
+            .then((storedPatient: string | null) => {
+                if (storedPatient) {
+                    try {
+                        const patientObj: Patient = JSON.parse(storedPatient);
+                        setPatient(patientObj);
+                    } catch {
+                        getPatient().then((p) => {
+                            setPatient(p);
+                            AsyncStorage.setItem('currentPatient', JSON.stringify(p));
+                        });
+                    }
                 } else {
                     getPatient().then((p) => {
                         setPatient(p);
-                        AsyncStorage.setItem('currentPatient', p);
+                        AsyncStorage.setItem('currentPatient', JSON.stringify(p));
                     });
                 }
             });

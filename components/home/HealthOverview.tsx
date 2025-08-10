@@ -23,7 +23,7 @@ const HealthOverview: React.FC = () => {
         style={styles.vitalsScrollView}
       >
         {vitals.slice(0, 5).map((visit: Vital) => (
-          <VitalCard key={visit.id} visit={visit} />
+          <VitalCard key={visit.id} visit={visit} borderColor='transparent' />
         ))}
       </ScrollView>
     </View>
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   carouselContainer: {
     paddingHorizontal: 8,
     paddingVertical: 10,
+    gap: 10,
   },
 });
 
