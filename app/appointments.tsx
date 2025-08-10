@@ -1,8 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Appointment } from '../common/types';
+import { getAppointments } from '../services/appointmentService';
 
 export default function AppointmentsScreen() {
+  const [activeTab, setActiveTab] = useState<'scheduled' | 'history'>('scheduled');
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [scheduledAppointments, setScheduledAppointments] = useState<Appointment[]>([]);
+  const [historyAppointments, setHistoryAppointments] = useState<Appointment[]>([]);
+
+  useEffect(() => {
+    getAppointments()
+      .then((appointments: Appointment[]) => setAppointments(appointments));
+  }, []);
+
+  useEffect(() => {
+    setScheduledAppointments(appointments.filter(a => a.status === 'Scheduled'));
+    setHistoryAppointments(appointments.filter(a => a.status !== 'Scheduled'));
+  }, [appointments]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -11,111 +28,117 @@ export default function AppointmentsScreen() {
           <Ionicons name="add" size={24} color="#2c5aa0" />
         </TouchableOpacity>
       </View>
-      
+
+      <View style={styles.tabContainer}>
+        <TouchableOpacity
+          style={[styles.tabButton, activeTab === 'scheduled' && styles.activeTab]}
+          onPress={() => setActiveTab('scheduled')}
+        >
+          <Text style={[styles.tabText, activeTab === 'scheduled' && styles.activeTabText]}>Scheduled</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tabButton, activeTab === 'history' && styles.activeTab]}
+          onPress={() => setActiveTab('history')}
+        >
+          <Text style={[styles.tabText, activeTab === 'history' && styles.activeTabText]}>History</Text>
+        </TouchableOpacity>
+      </View>
+
       <ScrollView style={styles.content}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Today's Appointments</Text>
-          
-          <View style={styles.appointmentCard}>
-            <View style={styles.appointmentHeader}>
-              <View style={styles.doctorInfo}>
-                <View style={styles.doctorAvatar}>
-                  <Text style={styles.doctorInitials}>MC</Text>
-                </View>
-                <View style={styles.doctorDetails}>
-                  <Text style={styles.doctorName}>Dr. Michael Chen</Text>
-                  <Text style={styles.specialty}>Cardiology</Text>
-                </View>
-              </View>
-              <View style={styles.timeContainer}>
-                <Text style={styles.timeText}>2:30 PM</Text>
-                <Text style={styles.statusText}>Today</Text>
-              </View>
-            </View>
-            <View style={styles.appointmentBody}>
-              <View style={styles.infoRow}>
-                <Ionicons name="location" size={16} color="#7f8c8d" />
-                <Text style={styles.infoText}>Room 302, Floor 3</Text>
-              </View>
-              <View style={styles.infoRow}>
-                <Ionicons name="medical" size={16} color="#7f8c8d" />
-                <Text style={styles.infoText}>Routine Checkup</Text>
-              </View>
-            </View>
-            <View style={styles.appointmentActions}>
-              <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionButtonText}>Reschedule</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.actionButton, styles.primaryButton]}>
-                <Text style={[styles.actionButtonText, styles.primaryButtonText]}>Check In</Text>
-              </TouchableOpacity>
-            </View>
+        {activeTab === 'scheduled' ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Scheduled Appointments</Text>
+            {scheduledAppointments.length === 0 ? (
+              <Text style={{ color: '#7f8c8d', textAlign: 'center', marginTop: 20 }}>No scheduled appointments.</Text>
+            ) : (
+              scheduledAppointments.map((a) => {
+                const now = new Date();
+                const isTele = a.visitType === 'tele';
+                const isEnabled = now.getTime() <= new Date(a.scheduledAt).getTime();
+                return (
+                  <View key={a.id} style={styles.appointmentCard}>
+                    <View style={styles.appointmentHeader}>
+                      <View style={styles.doctorInfo}>
+                        <View style={styles.doctorAvatar}>
+                          <Text style={styles.doctorInitials}>{a.doctor.name.split(' ').map((n: string) => n[0]).join('')}</Text>
+                        </View>
+                        <View style={styles.doctorDetails}>
+                          <Text style={styles.doctorName}>{a.doctor.name}</Text>
+                          <Text style={styles.specialty}>{a.doctor.department}</Text>
+                        </View>
+                      </View>
+                      <View style={styles.timeContainer}>
+                        <Text style={styles.timeText}>{a.scheduledAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+                        <Text style={styles.statusText}>Scheduled</Text>
+                      </View>
+                    </View>
+                    <View style={styles.appointmentBody}>
+                      <View style={styles.infoRow}>
+                        <Ionicons name="person" size={16} color="#7f8c8d" />
+                        <Text style={styles.infoText}>{a.patient.name}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.appointmentActions}>
+                                  <TouchableOpacity style={styles.iconButton} onPress={() => {/* handle reschedule */}}>
+                                    <Ionicons name="calendar" size={22} color="#2c5aa0" />
+                                  </TouchableOpacity>
+                                  <TouchableOpacity style={styles.iconButton} onPress={() => {/* handle cancel */}}>
+                                    <Ionicons name="close" size={22} color="#e74c3c" />
+                                  </TouchableOpacity>
+                                  {isTele && (
+                                    <TouchableOpacity
+                                      style={[styles.iconButton, !isEnabled && { backgroundColor: '#d3d3d3' }]}
+                                      onPress={() => {/* handle conference */}}
+                                      disabled={!isEnabled}
+                                    >
+                                      <Ionicons name="videocam" size={22} color={isEnabled ? '#27ae60' : '#7f8c8d'} style={{ opacity: isEnabled ? 1 : 0.5 }} />
+                                    </TouchableOpacity>
+                                  )}
+                    </View>
+                  </View>
+                );
+              })
+            )}
           </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Upcoming</Text>
-          
-          <View style={styles.appointmentCard}>
-            <View style={styles.appointmentHeader}>
-              <View style={styles.doctorInfo}>
-                <View style={styles.doctorAvatar}>
-                  <Text style={styles.doctorInitials}>SA</Text>
+        ) : (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Appointment History</Text>
+            {historyAppointments.length === 0 ? (
+              <Text style={{ color: '#7f8c8d', textAlign: 'center', marginTop: 20 }}>No past appointments.</Text>
+            ) : (
+              historyAppointments.map((a) => (
+                <View key={a.id} style={styles.appointmentCard}>
+                  <View style={styles.appointmentHeader}>
+                    <View style={styles.doctorInfo}>
+                      <View style={styles.doctorAvatar}>
+                        <Text style={styles.doctorInitials}>{a.doctor.name.split(' ').map(n => n[0]).join('')}</Text>
+                      </View>
+                      <View style={styles.doctorDetails}>
+                        <Text style={styles.doctorName}>{a.doctor.name}</Text>
+                        <Text style={styles.specialty}>{a.doctor.department}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.timeContainer}>
+                      <Text style={styles.timeText}>{a.scheduledAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+                      <Text style={styles.statusText}>{a.status}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.appointmentBody}>
+                    <View style={styles.infoRow}>
+                      <Ionicons name="person" size={16} color="#7f8c8d" />
+                      <Text style={styles.infoText}>{a.patient.name}</Text>
+                    </View>
+                  </View>
                 </View>
-                <View style={styles.doctorDetails}>
-                  <Text style={styles.doctorName}>Dr. Sarah Adams</Text>
-                  <Text style={styles.specialty}>General Medicine</Text>
-                </View>
-              </View>
-              <View style={styles.timeContainer}>
-                <Text style={styles.timeText}>10:00 AM</Text>
-                <Text style={styles.statusText}>Tomorrow</Text>
-              </View>
-            </View>
-            <View style={styles.appointmentBody}>
-              <View style={styles.infoRow}>
-                <Ionicons name="location" size={16} color="#7f8c8d" />
-                <Text style={styles.infoText}>Room 105, Floor 1</Text>
-              </View>
-              <View style={styles.infoRow}>
-                <Ionicons name="medical" size={16} color="#7f8c8d" />
-                <Text style={styles.infoText}>Follow-up Visit</Text>
-              </View>
-            </View>
+              ))
+            )}
           </View>
-
-          <View style={styles.appointmentCard}>
-            <View style={styles.appointmentHeader}>
-              <View style={styles.doctorInfo}>
-                <View style={styles.doctorAvatar}>
-                  <Text style={styles.doctorInitials}>RJ</Text>
-                </View>
-                <View style={styles.doctorDetails}>
-                  <Text style={styles.doctorName}>Dr. Robert Johnson</Text>
-                  <Text style={styles.specialty}>Orthopedics</Text>
-                </View>
-              </View>
-              <View style={styles.timeContainer}>
-                <Text style={styles.timeText}>3:15 PM</Text>
-                <Text style={styles.statusText}>Mon 12</Text>
-              </View>
-            </View>
-            <View style={styles.appointmentBody}>
-              <View style={styles.infoRow}>
-                <Ionicons name="location" size={16} color="#7f8c8d" />
-                <Text style={styles.infoText}>Room 201, Floor 2</Text>
-              </View>
-              <View style={styles.infoRow}>
-                <Ionicons name="medical" size={16} color="#7f8c8d" />
-                <Text style={styles.infoText}>Consultation</Text>
-              </View>
-            </View>
-          </View>
-        </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -241,7 +264,7 @@ const styles = StyleSheet.create({
   },
   appointmentActions: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   actionButton: {
     flex: 1,
@@ -252,6 +275,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#2c5aa0',
   },
+    iconButton: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      backgroundColor: '#e3f2fd',
+      marginRight: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   primaryButton: {
     backgroundColor: '#2c5aa0',
   },
@@ -262,5 +294,32 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     color: '#ffffff',
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e3e3e3',
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+  },
+  activeTab: {
+    borderBottomColor: '#2c5aa0',
+  },
+  tabText: {
+    fontSize: 16,
+    color: '#7f8c8d',
+    fontWeight: '600',
+  },
+  activeTabText: {
+    color: '#2c5aa0',
+    fontWeight: 'bold',
   },
 });

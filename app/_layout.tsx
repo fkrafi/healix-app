@@ -1,15 +1,26 @@
-import { Tabs } from 'expo-router';
-import 'react-native-get-random-values';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useState, createContext, useContext } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getPatient } from '../services/patientService';
+import { Tabs } from 'expo-router';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Linking, TouchableOpacity } from 'react-native';
+import 'react-native-get-random-values';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Patient } from '../common/types';
+import { getPatient } from '../services/patientService';
 
 // Patient Context
 export const PatientContext = createContext<Patient | null>(null);
 export const usePatient = () => useContext(PatientContext);
+
+// Emergency screen component that triggers the call
+function EmergencyScreen() {
+    useEffect(() => {
+        Linking.openURL('tel:0547728502');
+    }, []);
+    return null;
+}
+// Removed duplicate import of Linking
+
 // Tab icon components
 function HomeIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />;
@@ -18,6 +29,11 @@ function HomeIcon({ color, focused }: { readonly color: string; readonly focused
 function AppointmentsIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'calendar' : 'calendar-outline'} size={24} color={color} />;
 }
+
+function EmergencyIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
+    return <Ionicons name={focused ? 'call' : 'call-outline'} size={24} color={color} />;
+}
+
 
 function RecordsIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'document-text' : 'document-text-outline'} size={24} color={color} />;
@@ -94,6 +110,21 @@ export default function TabLayout() {
                     }}
                 />
                 <Tabs.Screen
+                    name="Emergency"
+                    options={{
+                        title: 'Emergency',
+                        tabBarIcon: EmergencyIcon,
+                        tabBarButton: (props) => (
+                            <TouchableOpacity
+                                {...(props as React.ComponentProps<typeof TouchableOpacity>)}
+                                onPress={() => Linking.openURL('tel:0547728502')}
+                            >
+                                {EmergencyIcon({ color: props.accessibilityState?.selected ? '#2c5aa0' : '#95a5a6', focused: !!props.accessibilityState?.selected })}
+                            </TouchableOpacity>
+                        ),
+                    }}
+                />
+                <Tabs.Screen
                     name="records"
                     options={{
                         title: 'Records',
@@ -102,9 +133,12 @@ export default function TabLayout() {
                 />
                 <Tabs.Screen
                     name="messages"
+                    // options={{
+                    //     title: 'Messages',
+                    //     tabBarIcon: MessagesIcon,
+                    // }}
                     options={{
-                        title: 'Messages',
-                        tabBarIcon: MessagesIcon,
+                        href: null, // This hides the screen from the tab bar
                     }}
                 />
                 <Tabs.Screen

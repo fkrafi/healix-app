@@ -37,12 +37,17 @@ export interface Vital {
     weight: string;
 }
 
+
+export type AppointmentStatus = 'Scheduled' | 'Completed' | 'Cancelled' | 'No Show';
+export type VisitType = 'in-person' | 'tele';
+
 export interface Appointment {
     id: string;
     patient: Patient;
     doctor: Doctor;
     scheduledAt: Date;
-    status?: 'Scheduled' | 'Completed' | 'Cancelled' | 'No Show';
+    status?: AppointmentStatus;
+    visitType: VisitType;
 }
 
 export interface Medication {
