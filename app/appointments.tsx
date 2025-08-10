@@ -1,14 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, PanResponder } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Appointment } from '../common/types';
 import { getAppointments } from '../services/appointmentService';
+import { AppointmentCard } from '../components/appointments';
 
 export default function AppointmentsScreen() {
   const [activeTab, setActiveTab] = useState<'scheduled' | 'history'>('scheduled');
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [scheduledAppointments, setScheduledAppointments] = useState<Appointment[]>([]);
   const [historyAppointments, setHistoryAppointments] = useState<Appointment[]>([]);
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (evt, gestureState) => Math.abs(gestureState.dx) > 20,
+      onPanResponderRelease: (evt, gestureState) => {
+        if (gestureState.dx < -50 && activeTab === 'scheduled') {
+          setActiveTab('history');
+        } else if (gestureState.dx > 50 && activeTab === 'history') {
+          setActiveTab('scheduled');
+        }
+      },
+    })
+  ).current;
 
   useEffect(() => {
     getAppointments()
@@ -44,61 +57,21 @@ export default function AppointmentsScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.content} {...panResponder.panHandlers}>
         {activeTab === 'scheduled' ? (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Scheduled Appointments</Text>
-            {scheduledAppointments.length === 0 ? (
-              <Text style={{ color: '#7f8c8d', textAlign: 'center', marginTop: 20 }}>No scheduled appointments.</Text>
-            ) : (
-              scheduledAppointments.map((a) => {
-                const now = new Date();
-                const isTele = a.visitType === 'tele';
-                const isEnabled = now.getTime() <= new Date(a.scheduledAt).getTime();
-                return (
-                  <View key={a.id} style={styles.appointmentCard}>
-                    <View style={styles.appointmentHeader}>
-                      <View style={styles.doctorInfo}>
-                        <View style={styles.doctorAvatar}>
-                          <Text style={styles.doctorInitials}>{a.doctor.name.split(' ').map((n: string) => n[0]).join('')}</Text>
-                        </View>
-                        <View style={styles.doctorDetails}>
-                          <Text style={styles.doctorName}>{a.doctor.name}</Text>
-                          <Text style={styles.specialty}>{a.doctor.department}</Text>
-                        </View>
-                      </View>
-                      <View style={styles.timeContainer}>
-                        <Text style={styles.timeText}>{a.scheduledAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
-                        <Text style={styles.statusText}>Scheduled</Text>
-                      </View>
-                    </View>
-                    <View style={styles.appointmentBody}>
-                      <View style={styles.infoRow}>
-                        <Ionicons name="person" size={16} color="#7f8c8d" />
-                        <Text style={styles.infoText}>{a.patient.name}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.appointmentActions}>
-                                  <TouchableOpacity style={styles.iconButton} onPress={() => {/* handle reschedule */}}>
-                                    <Ionicons name="calendar" size={22} color="#2c5aa0" />
-                                  </TouchableOpacity>
-                                  <TouchableOpacity style={styles.iconButton} onPress={() => {/* handle cancel */}}>
-                                    <Ionicons name="close" size={22} color="#e74c3c" />
-                                  </TouchableOpacity>
-                                  {isTele && (
-                                    <TouchableOpacity
-                                      style={[styles.iconButton, !isEnabled && { backgroundColor: '#d3d3d3' }]}
-                                      onPress={() => {/* handle conference */}}
-                                      disabled={!isEnabled}
-                                    >
-                                      <Ionicons name="videocam" size={22} color={isEnabled ? '#27ae60' : '#7f8c8d'} style={{ opacity: isEnabled ? 1 : 0.5 }} />
-                                    </TouchableOpacity>
-                                  )}
-                    </View>
-                  </View>
-                );
-              })
-            )}
+            {scheduledAppointments.map((a) => (
+              <AppointmentCard
+                key={a.id}
+                appointment={a}
+                type="scheduled"
+                onReschedule={() => {/* handle reschedule */ }}
+                onCancel={() => {/* handle cancel */ }}
+                onConference={() => {/* handle conference */ }}
+                conferenceEnabled={new Date().getTime() >= new Date(a.scheduledAt).getTime()}
+              />
+            ))}
           </View>
         ) : (
           <View style={styles.section}>
@@ -107,29 +80,12 @@ export default function AppointmentsScreen() {
               <Text style={{ color: '#7f8c8d', textAlign: 'center', marginTop: 20 }}>No past appointments.</Text>
             ) : (
               historyAppointments.map((a) => (
-                <View key={a.id} style={styles.appointmentCard}>
-                  <View style={styles.appointmentHeader}>
-                    <View style={styles.doctorInfo}>
-                      <View style={styles.doctorAvatar}>
-                        <Text style={styles.doctorInitials}>{a.doctor.name.split(' ').map(n => n[0]).join('')}</Text>
-                      </View>
-                      <View style={styles.doctorDetails}>
-                        <Text style={styles.doctorName}>{a.doctor.name}</Text>
-                        <Text style={styles.specialty}>{a.doctor.department}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.timeContainer}>
-                      <Text style={styles.timeText}>{a.scheduledAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
-                      <Text style={styles.statusText}>{a.status}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.appointmentBody}>
-                    <View style={styles.infoRow}>
-                      <Ionicons name="person" size={16} color="#7f8c8d" />
-                      <Text style={styles.infoText}>{a.patient.name}</Text>
-                    </View>
-                  </View>
-                </View>
+                <AppointmentCard
+                  key={a.id}
+                  appointment={a}
+                  type="history"
+                  onRebook={() => {/* handle rebook */ }}
+                />
               ))
             )}
           </View>
@@ -275,15 +231,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#2c5aa0',
   },
-    iconButton: {
-      width: 36,
-      height: 36,
-      borderRadius: 18,
-      backgroundColor: '#e3f2fd',
-      marginRight: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+  iconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#e3f2fd',
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   primaryButton: {
     backgroundColor: '#2c5aa0',
   },

@@ -13,12 +13,12 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      
+
       {/* Header */}
       <Header />
 
-      <ScrollView 
-        style={styles.content} 
+      <ScrollView
+        style={styles.content}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior="never"
@@ -33,14 +33,11 @@ export default function HomeScreen() {
         <HealthOverview />
 
         {/* Quick Actions */}
-        <QuickActions />
+        {/* <QuickActions /> */}
 
         {/* Recent Activity */}
-        <RecentActivity />
+        {/* <RecentActivity /> */}
       </ScrollView>
-
-      {/* Emergency FAB */}
-      <EmergencyFAB />
     </View>
   );
 }

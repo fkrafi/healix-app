@@ -14,21 +14,21 @@ export default function ProfileScreen() {
     );
   };
 
-  const handleEditProfile = () => {
-    Alert.alert('Edit Profile', 'Profile editing feature coming soon!');
-  };
+  // const handleEditProfile = () => {
+  //   Alert.alert('Edit Profile', 'Profile editing feature coming soon!');
+  // };
 
-  const handleSettings = () => {
-    Alert.alert('Settings', 'Settings screen coming soon!');
-  };
+  // const handleSettings = () => {
+  //   Alert.alert('Settings', 'Settings screen coming soon!');
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Profile</Text>
-        <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
+        {/* <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
           <Ionicons name="create" size={24} color="#2c5aa0" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       
       <ScrollView style={styles.content}>
@@ -121,7 +121,7 @@ export default function ProfileScreen() {
         </View>
 
         {/* Menu Options */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>Settings & Support</Text>
           
           <View style={styles.menuCard}>
@@ -169,7 +169,7 @@ export default function ProfileScreen() {
               <Ionicons name="chevron-forward" size={20} color="#bdc3c7" />
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
 
         {/* Emergency Contact */}
         <View style={styles.section}>

@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Tabs } from 'expo-router';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Linking, TouchableOpacity } from 'react-native';
+import { Linking, TouchableOpacity, StyleSheet, Touchable, View } from 'react-native';
 import 'react-native-get-random-values';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Patient } from '../common/types';
@@ -11,15 +11,6 @@ import { getPatient } from '../services/patientService';
 // Patient Context
 export const PatientContext = createContext<Patient | null>(null);
 export const usePatient = () => useContext(PatientContext);
-
-// Emergency screen component that triggers the call
-function EmergencyScreen() {
-    useEffect(() => {
-        Linking.openURL('tel:0547728502');
-    }, []);
-    return null;
-}
-// Removed duplicate import of Linking
 
 // Tab icon components
 function HomeIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
@@ -30,10 +21,18 @@ function AppointmentsIcon({ color, focused }: { readonly color: string; readonly
     return <Ionicons name={focused ? 'calendar' : 'calendar-outline'} size={24} color={color} />;
 }
 
-function EmergencyIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
-    return <Ionicons name={focused ? 'call' : 'call-outline'} size={24} color={color} />;
+function EmergencyButton() {
+    return (
+        <View style={styles.buttonContainer}>
+            <TouchableOpacity
+                onPress={() => Linking.openURL("tel:+971500000000")}
+                style={styles.floatingButton}
+            >
+                <Ionicons name="call" size={28} color="white" />
+            </TouchableOpacity>
+        </View>
+    );
 }
-
 
 function RecordsIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'document-text' : 'document-text-outline'} size={24} color={color} />;
@@ -110,18 +109,11 @@ export default function TabLayout() {
                     }}
                 />
                 <Tabs.Screen
-                    name="Emergency"
+                    name="emergency"
                     options={{
-                        title: 'Emergency',
-                        tabBarIcon: EmergencyIcon,
-                        tabBarButton: (props) => (
-                            <TouchableOpacity
-                                {...(props as React.ComponentProps<typeof TouchableOpacity>)}
-                                onPress={() => Linking.openURL('tel:0547728502')}
-                            >
-                                {EmergencyIcon({ color: props.accessibilityState?.selected ? '#2c5aa0' : '#95a5a6', focused: !!props.accessibilityState?.selected })}
-                            </TouchableOpacity>
-                        ),
+                        tabBarLabel: "",
+                        tabBarIcon: () => null, // Hide icon
+                        tabBarButton: () => <EmergencyButton />,
                     }}
                 />
                 <Tabs.Screen
@@ -158,3 +150,25 @@ export default function TabLayout() {
         </PatientContext.Provider>
     );
 }
+
+const styles = StyleSheet.create({
+    buttonContainer: {
+        flex: 1,
+        alignItems: "center",
+    },
+    floatingButton: {
+        backgroundColor: '#e74c3c',
+        width: 65,
+        height: 65,
+        borderRadius: 32.5,
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        bottom: 20,
+        shadowColor: '#e74c3c',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        elevation: 5,
+    },
+});
