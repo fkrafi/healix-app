@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import Header from '../components/common/Header';
 import HealthOverview from '../components/home/HealthOverview';
 import PatientCard from '../components/home/PatientCard';
+import UpcomingAppointments from '../components/home/UpcomingAppointments';
 
 export default function HomeScreen() {
   return (
@@ -23,7 +24,7 @@ export default function HomeScreen() {
         <PatientCard />
 
         {/* Upcoming Appointments Carousel */}
-        {/* <AppointmentsSection /> */}
+        <UpcomingAppointments />
 
         {/* Health Overview */}
         <HealthOverview />
