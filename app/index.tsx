@@ -1,13 +1,9 @@
-import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import Header from '../components/common/Header';
-import PatientCard from '../components/home/PatientCard';
 import HealthOverview from '../components/home/HealthOverview';
-import AppointmentsSection from '../components/appointments/AppointmentsSection';
-import QuickActions from '../components/home/QuickActions';
-import RecentActivity from '../components/home/RecentActivity';
-import EmergencyFAB from '../components/common/EmergencyFAB';
+import PatientCard from '../components/home/PatientCard';
 
 export default function HomeScreen() {
   return (
@@ -27,7 +23,7 @@ export default function HomeScreen() {
         <PatientCard />
 
         {/* Upcoming Appointments Carousel */}
-        <AppointmentsSection />
+        {/* <AppointmentsSection /> */}
 
         {/* Health Overview */}
         <HealthOverview />

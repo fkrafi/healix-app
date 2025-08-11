@@ -1,27 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, PanResponder } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Appointment } from '../common/types';
+import { AppointmentsSection } from '../components/appointments';
 import { getAppointments } from '../services/appointmentService';
-import { AppointmentCard } from '../components/appointments';
 
 export default function AppointmentsScreen() {
   const [activeTab, setActiveTab] = useState<'scheduled' | 'history'>('scheduled');
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [scheduledAppointments, setScheduledAppointments] = useState<Appointment[]>([]);
   const [historyAppointments, setHistoryAppointments] = useState<Appointment[]>([]);
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (evt, gestureState) => Math.abs(gestureState.dx) > 20,
-      onPanResponderRelease: (evt, gestureState) => {
-        if (gestureState.dx < -50 && activeTab === 'scheduled') {
-          setActiveTab('history');
-        } else if (gestureState.dx > 50 && activeTab === 'history') {
-          setActiveTab('scheduled');
-        }
-      },
-    })
-  ).current;
 
   useEffect(() => {
     getAppointments()
@@ -29,8 +17,9 @@ export default function AppointmentsScreen() {
   }, []);
 
   useEffect(() => {
-    setScheduledAppointments(appointments.filter(a => a.status === 'Scheduled'));
-    setHistoryAppointments(appointments.filter(a => a.status !== 'Scheduled'));
+    const nowPlus15Min = new Date().getTime() + 900000;
+    setScheduledAppointments(appointments.filter(a => a.scheduledAt.getTime() >= nowPlus15Min && a.status === 'Scheduled'));
+    setHistoryAppointments(appointments.filter(a => a.scheduledAt.getTime() < nowPlus15Min));
   }, [appointments]);
 
   return (
@@ -57,38 +46,15 @@ export default function AppointmentsScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.content} {...panResponder.panHandlers}>
+      <ScrollView style={styles.content}>
         {activeTab === 'scheduled' ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Scheduled Appointments</Text>
-            {scheduledAppointments.map((a) => (
-              <AppointmentCard
-                key={a.id}
-                appointment={a}
-                type="scheduled"
-                onReschedule={() => {/* handle reschedule */ }}
-                onCancel={() => {/* handle cancel */ }}
-                onConference={() => {/* handle conference */ }}
-                conferenceEnabled={new Date().getTime() >= new Date(a.scheduledAt).getTime()}
-              />
-            ))}
-          </View>
+          <AppointmentsSection
+            sectionTitle='Scheduled Appointments'
+            appointments={scheduledAppointments} />
         ) : (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Appointment History</Text>
-            {historyAppointments.length === 0 ? (
-              <Text style={{ color: '#7f8c8d', textAlign: 'center', marginTop: 20 }}>No past appointments.</Text>
-            ) : (
-              historyAppointments.map((a) => (
-                <AppointmentCard
-                  key={a.id}
-                  appointment={a}
-                  type="history"
-                  onRebook={() => {/* handle rebook */ }}
-                />
-              ))
-            )}
-          </View>
+          <AppointmentsSection
+            sectionTitle='Appointment History'
+            appointments={historyAppointments} />
         )}
       </ScrollView>
     </SafeAreaView>

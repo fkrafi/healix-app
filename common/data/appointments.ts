@@ -7,8 +7,8 @@ export const APPOINTMENT_1: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_ALICE_SMITH,
-  scheduledAt: new Date('2024-06-10T09:00:00Z'),
-  status: 'Scheduled',
+  scheduledAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+  status: 'Completed',
   visitType: 'in-person',
 };
 
@@ -16,8 +16,8 @@ export const APPOINTMENT_2: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_BOB_JOHNSON,
-  scheduledAt: new Date('2024-06-11T11:30:00Z'),
-  status: 'Completed',
+  scheduledAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+  status: 'Cancelled',
   visitType: 'tele',
 };
 
@@ -25,8 +25,8 @@ export const APPOINTMENT_3: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_ALICE_SMITH,
-  scheduledAt: new Date('2024-06-12T14:00:00Z'),
-  status: 'Cancelled',
+  scheduledAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+  status: 'No Show',
   visitType: 'in-person',
 };
 
@@ -34,7 +34,7 @@ export const APPOINTMENT_4: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_BOB_JOHNSON,
-  scheduledAt: new Date('2024-06-13T10:00:00Z'),
+  scheduledAt: new Date(), // today
   status: 'Scheduled',
   visitType: 'tele',
 };
@@ -43,8 +43,8 @@ export const APPOINTMENT_5: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_ALICE_SMITH,
-  scheduledAt: new Date('2024-06-14T15:30:00Z'),
-  status: 'Completed',
+  scheduledAt: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours from now
+  status: 'Scheduled',
   visitType: 'in-person',
 };
 
@@ -52,7 +52,7 @@ export const APPOINTMENT_6: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_BOB_JOHNSON,
-  scheduledAt: new Date('2024-06-15T09:45:00Z'),
+  scheduledAt: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // tomorrow
   status: 'Scheduled',
   visitType: 'tele',
 };
@@ -61,8 +61,8 @@ export const APPOINTMENT_7: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_ALICE_SMITH,
-  scheduledAt: new Date('2024-06-16T13:00:00Z'),
-  status: 'No Show',
+  scheduledAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
+  status: 'Scheduled',
   visitType: 'in-person',
 };
 
@@ -70,8 +70,8 @@ export const APPOINTMENT_8: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_BOB_JOHNSON,
-  scheduledAt: new Date('2024-06-17T11:15:00Z'),
-  status: 'Completed',
+  scheduledAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
+  status: 'Scheduled',
   visitType: 'tele',
 };
 
@@ -79,7 +79,7 @@ export const APPOINTMENT_9: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_ALICE_SMITH,
-  scheduledAt: new Date('2024-06-18T16:30:00Z'),
+  scheduledAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
   status: 'Scheduled',
   visitType: 'in-person',
 };
@@ -88,8 +88,8 @@ export const APPOINTMENT_10: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_BOB_JOHNSON,
-  scheduledAt: new Date('2024-06-19T08:00:00Z'),
-  status: 'Cancelled',
+  scheduledAt: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days from now
+  status: 'Scheduled',
   visitType: 'tele',
 };
 
@@ -97,7 +97,7 @@ export const APPOINTMENT_11: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_ALICE_SMITH,
-  scheduledAt: new Date('2024-06-20T14:30:00Z'),
+  scheduledAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 14 days ago
   status: 'Completed',
   visitType: 'in-person',
 };
@@ -106,7 +106,7 @@ export const APPOINTMENT_12: Appointment = {
   id: uuidv4(),
   patient: patient,
   doctor: DOCTOR_BOB_JOHNSON,
-  scheduledAt: new Date('2024-06-21T12:00:00Z'),
+  scheduledAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
   status: 'Scheduled',
   visitType: 'tele',
 };
