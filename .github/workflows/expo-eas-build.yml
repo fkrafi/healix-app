@@ -1,0 +1,39 @@
+name: Expo EAS Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  eas-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Log in to Expo
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas login --token $EXPO_TOKEN
+
+      - name: Configure EAS Build
+        run: eas build:configure
+
+      - name: Run EAS Build (Android)
+        run: eas build --platform android --non-interactive
+
+      - name: Run EAS Build (iOS)
+        run: eas build --platform ios --non-interactive

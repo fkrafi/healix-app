@@ -7,6 +7,11 @@ import { router } from 'expo-router';
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = () => {
+
+  const handleChatPress = () => {
+    Alert.alert('Chat', 'Chat feature is not available yet.');
+  };
+
   const handleNotificationPress = () => {
     Alert.alert('Notifications', 'You have 3 new notifications');
   };
@@ -24,6 +29,9 @@ const Header: React.FC<HeaderProps> = () => {
             <Text style={styles.greeting}>Good Morning</Text>
             <Text style={styles.userName}>John Doe</Text>
           </View>
+          <TouchableOpacity style={styles.settingsButton} onPress={handleChatPress}>
+            <Ionicons name="chatbubbles-sharp" size={20} />
+          </TouchableOpacity>
           <TouchableOpacity style={styles.notificationButton} onPress={handleNotificationPress}>
             <View style={styles.notificationIcon}>
               <Ionicons name="notifications" size={20} />
@@ -84,7 +92,10 @@ const styles = StyleSheet.create({
     color: '#2c3e50',
   },
   notificationButton: {
-    padding: 8,
+    padding: 0,
+  },
+  settingsButton: {
+    padding: 0,
   },
   notificationIcon: {
     width: 40,

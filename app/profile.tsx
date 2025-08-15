@@ -13,15 +13,6 @@ export default function ProfileScreen() {
       ]
     );
   };
-
-  // const handleEditProfile = () => {
-  //   Alert.alert('Edit Profile', 'Profile editing feature coming soon!');
-  // };
-
-  // const handleSettings = () => {
-  //   Alert.alert('Settings', 'Settings screen coming soon!');
-  // };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>

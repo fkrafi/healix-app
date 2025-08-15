@@ -1,18 +1,38 @@
-// types.ts
+export type Department = 'Cardiology' | 'Dermatology' | 'Neurology' | 'Pediatrics' | 
+    'Oncology' | 'General Medicine' | 'Orthopedics' | 'Psychiatry' | 'Gynecology' | 
+    'Ophthalmology' | 'ENT' | 'Dentistry' | 'Urology' | 'Endocrinology';
 
-export type Department = 'Cardiology' | 'Dermatology' | 'Neurology' | 'Pediatrics' | 'Oncology' | 'General Medicine' | 'Orthopedics' | 'Psychiatry' | 'Gynecology';
+// Map Department to Ionicons icon name
+export const DepartmentIconMap: Record<Department, string> = {
+    Cardiology: 'heart-pulse',
+    Dermatology: 'hand-wave',
+    Neurology: 'brain',
+    Pediatrics: 'baby-face-outline',
+    Oncology: 'ribbon',
+    'General Medicine': 'stethoscope',
+    Orthopedics: 'walk',
+    Psychiatry: 'eye',
+    Gynecology: 'gender-female',
+    Ophthalmology: 'eye',
+    ENT: 'ear-hearing',
+    Dentistry: 'tooth',
+    Urology: 'water',
+    Endocrinology: 'dna'
+};
+// types.ts
 
 export interface Doctor {
     id: string;
     name: string;
-    contact?: string;
+    contact: string;
     email?: string;
-    department?: Department;
-    nationality?: string;
-    languages?: string[];
-    expertise?: string[];
-    qualifications?: string[];
-    experiences?: string[];
+    department: Department;
+    nationality: string;
+    languages: string[];
+    expertise: string[];
+    qualifications: string[];
+    experiences: string[];
+    locations: string[];
 }
 
 export interface Patient {

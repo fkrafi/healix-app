@@ -4,6 +4,7 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } fr
 import { Appointment } from '../common/types';
 import { AppointmentsSection } from '../components/appointments';
 import { getAppointments } from '../services/appointmentService';
+import { router } from 'expo-router';
 
 export default function AppointmentsScreen() {
   const [activeTab, setActiveTab] = useState<'scheduled' | 'history'>('scheduled');
@@ -26,7 +27,7 @@ export default function AppointmentsScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Appointments</Text>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={() =>  router.push('/search')}>
           <Ionicons name="add" size={24} color="#2c5aa0" />
         </TouchableOpacity>
       </View>

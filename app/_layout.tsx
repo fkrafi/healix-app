@@ -2,11 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Tabs } from 'expo-router';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Linking, TouchableOpacity, StyleSheet, Touchable, View } from 'react-native';
 import 'react-native-get-random-values';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Patient } from '../common/types';
 import { getPatient } from '../services/patientService';
+import { EmergencyButton } from '../components/common';
 
 // Patient Context
 export const PatientContext = createContext<Patient | null>(null);
@@ -19,19 +19,6 @@ function HomeIcon({ color, focused }: { readonly color: string; readonly focused
 
 function AppointmentsIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'calendar' : 'calendar-outline'} size={24} color={color} />;
-}
-
-function EmergencyButton() {
-    return (
-        <View style={styles.buttonContainer}>
-            <TouchableOpacity
-                onPress={() => Linking.openURL("tel:+971500000000")}
-                style={styles.floatingButton}
-            >
-                <Ionicons name="call" size={28} color="white" />
-            </TouchableOpacity>
-        </View>
-    );
 }
 
 function RecordsIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
@@ -146,29 +133,13 @@ export default function TabLayout() {
                         href: null, // This hides the screen from the tab bar
                     }}
                 />
+                <Tabs.Screen
+                    name="doctor-profile"
+                    options={{
+                        href: null, // This hides the screen from the tab bar
+                    }}
+                />
             </Tabs>
         </PatientContext.Provider>
     );
 }
-
-const styles = StyleSheet.create({
-    buttonContainer: {
-        flex: 1,
-        alignItems: "center",
-    },
-    floatingButton: {
-        backgroundColor: '#e74c3c',
-        width: 65,
-        height: 65,
-        borderRadius: 32.5,
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute",
-        bottom: 20,
-        shadowColor: '#e74c3c',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 5,
-    },
-});
