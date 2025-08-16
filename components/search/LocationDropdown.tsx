@@ -4,6 +4,7 @@ import IconDropdown, { DropdownItem } from '../common/IconDropdown';
 interface LocationDropdownProps {
   selectedLocation: string | null;
   onSelect: (location: string) => void;
+  locations?: string[];
   placeholder?: string;
   style?: any;
 }
@@ -22,10 +23,11 @@ const LOCATIONS = [
 const LocationDropdown: React.FC<LocationDropdownProps> = ({
   selectedLocation,
   onSelect,
+  locations = LOCATIONS,
   placeholder = 'Select Location',
   style,
 }) => {
-  const items: DropdownItem[] = LOCATIONS.map(loc => ({
+  const items: DropdownItem[] = locations.map(loc => ({
     label: loc,
     value: loc,
     icon: 'location-outline',

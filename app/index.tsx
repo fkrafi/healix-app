@@ -1,10 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import Header from '../components/common/Header';
-import HealthOverview from '../components/home/HealthOverview';
-import PatientCard from '../components/home/PatientCard';
-import UpcomingAppointments from '../components/home/UpcomingAppointments';
+import { Header, HealthOverview, PatientCard, UpcomingAppointments } from '../components/home';
 
 export default function HomeScreen() {
   return (

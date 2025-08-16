@@ -10,3 +10,8 @@ export function getDoctorsByDepartment(department: Department): Promise<Doctor[]
         doctors.filter(doc => doc.department === department)
     );
 }
+
+export function getDoctorById(id: string): Promise<Doctor | null> {
+    const doctor = doctors.find(doc => doc.id === id);
+    return Promise.resolve(doctor || null);
+}

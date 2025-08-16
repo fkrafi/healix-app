@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { Appointment } from '../../common/types';
+import { router } from 'expo-router';
 
 interface AppointmentCardProps {
   appointment: Appointment;
@@ -44,7 +45,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment, type }) 
                 <Text style={[styles.status, getStatusColor(appointment.status)]}>{appointment.status}</Text>
               )}
               {isHistory ? (
-                <TouchableOpacity style={[styles.iconButtonCompact, { backgroundColor: '#f4f4f4' }]}> 
+                <TouchableOpacity style={[styles.iconButtonCompact, { backgroundColor: '#f4f4f4' }]} onPress={() => router.push({ pathname: '/book-appointment', params: { id: appointment.doctor.id } })}>
                   <Ionicons name="repeat" size={18} color="#7f8c8d" />
                 </TouchableOpacity>
               ) : (

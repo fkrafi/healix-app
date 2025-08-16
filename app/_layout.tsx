@@ -139,6 +139,12 @@ export default function TabLayout() {
                         href: null, // This hides the screen from the tab bar
                     }}
                 />
+                <Tabs.Screen
+                    name="book-appointment"
+                    options={{
+                        href: null, // This hides the screen from the tab bar
+                    }}
+                />
             </Tabs>
         </PatientContext.Provider>
     );

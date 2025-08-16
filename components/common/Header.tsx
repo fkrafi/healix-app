@@ -1,150 +1,64 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-interface HeaderProps {}
 
-const Header: React.FC<HeaderProps> = () => {
+interface HeaderProps {
+  title: string;
+  backRoute?: {
+    pathname: string;
+    params?: Record<string, any>;
+  }
+}
 
-  const handleChatPress = () => {
-    Alert.alert('Chat', 'Chat feature is not available yet.');
-  };
-
-  const handleNotificationPress = () => {
-    Alert.alert('Notifications', 'You have 3 new notifications');
-  };
-
-  const handleSearchPress = () => {
-    router.push('/search');
-  };
-
+const Header: React.FC<HeaderProps> = ({ title, backRoute }) => {
+  const router = useRouter();
   return (
-    <SafeAreaView style={styles.headerSafeArea}>
-      <View style={styles.header}>
-        {/* First Row - Greeting and Notification */}
-        <View style={styles.headerFirstRow}>
-          <View style={styles.greetingContainer}>
-            <Text style={styles.greeting}>Good Morning</Text>
-            <Text style={styles.userName}>John Doe</Text>
-          </View>
-          <TouchableOpacity style={styles.settingsButton} onPress={handleChatPress}>
-            <Ionicons name="chatbubbles-sharp" size={20} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.notificationButton} onPress={handleNotificationPress}>
-            <View style={styles.notificationIcon}>
-              <Ionicons name="notifications" size={20} />
-              {/* Notification badge */}
-              <View style={styles.notificationBadge}>
-                <Text style={styles.badgeText}>3</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
-        
-        {/* Second Row - Search Bar */}
-        <View style={styles.headerSecondRow}>
-          <TouchableOpacity style={styles.searchContainer} onPress={handleSearchPress}>
-            <View style={styles.searchIcon}>
-              <Ionicons name="search" size={16} color="#6c757d" />
-            </View>
-            <Text style={styles.searchPlaceholder}>Search doctors or services...</Text>
-          </TouchableOpacity>
-        </View>
+    <SafeAreaView style={styles.safeHeader}>
+      <View style={styles.stickyHeader}>
+        <TouchableOpacity style={styles.headerBackButton} onPress={() => router.push(backRoute || 'home')}>
+          <Ionicons name="arrow-back" size={28} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{title}</Text>
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  headerSafeArea: {
-    backgroundColor: '#ffffff',
+  safeHeader: {
+    backgroundColor: '#2c5aa0',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
-  header: {
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 20,
-    paddingBottom: 25,
-    paddingTop: 10,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  headerFirstRow: {
+  stickyHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
+    justifyContent: 'center',
+    backgroundColor: '#2c5aa0',
+    height: 56,
+    zIndex: 10,
   },
-  greetingContainer: {
+  headerBackButton: {
+    position: 'absolute',
+    left: 8,
+    top: 0,
+    bottom: 0,
+    height: 56,
+    width: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 11,
+    padding: 4,
+  },
+  headerTitle: {
     flex: 1,
-  },
-  greeting: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    marginBottom: 2,
-  },
-  userName: {
+    textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#2c3e50',
+    color: '#fff',
+    alignSelf: 'center',
   },
-  notificationButton: {
-    padding: 0,
-  },
-  settingsButton: {
-    padding: 0,
-  },
-  notificationIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    // backgroundColor: '#2c5aa0',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  notificationBadge: {
-    position: 'absolute',
-    top: -2,
-    right: -2,
-    backgroundColor: '#e74c3c',
-    borderRadius: 10,
-    width: 20,
-    height: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: '#ffffff',
-  },
-  badgeText: {
-    color: '#ffffff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  headerSecondRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  searchContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    height: 44,
-  },
-  searchIcon: {
-    marginRight: 8,
-  },
-  searchPlaceholder: {
-    flex: 1,
-    fontSize: 16,
-    color: '#6c757d',
-  },
-});
+})
 
 export default Header;

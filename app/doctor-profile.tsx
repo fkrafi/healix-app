@@ -1,20 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { Platform, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Doctor } from '../common/types';
-import { getAllDoctors } from '../services/doctorService';
+import { Header } from '../components/common';
+import { getDoctorById } from '../services/doctorService';
 
 export default function DoctorProfileScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const [doctor, setDoctor] = useState<Doctor | null>(null);
-    const router = useRouter();
 
     useEffect(() => {
-        getAllDoctors().then(doctors => {
-            const found = doctors.find(d => d.id === id);
-            setDoctor(found || null);
-        });
+        getDoctorById(id).then(setDoctor);
     }, [id]);
 
     if (!doctor) {
@@ -27,48 +24,47 @@ export default function DoctorProfileScreen() {
 
     return (
         <View style={{ flex: 1, backgroundColor: '#f8f9fa' }}>
-            <SafeAreaView style={styles.safeHeader}>
-                <View style={styles.stickyHeader}>
-                    <TouchableOpacity style={styles.headerBackButton} onPress={() => router.push('/search')}>
-                        <Ionicons name="arrow-back" size={28} color="#fff" />
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Doctor Profile</Text>
-                </View>
-            </SafeAreaView>
+            <Header title='Doctor Profile' backRoute={{ pathname: '/search' }} />
+
             <ScrollView style={styles.container} contentContainerStyle={{ paddingTop: 0 }}>
                 <View style={styles.headerContent}>
-                <Ionicons name="person-circle" size={64} color="#2c5aa0" style={{ marginBottom: 12 }} />
-                <Text style={styles.name}>{doctor.name}</Text>
-                <Text style={styles.department}>{doctor.department}</Text>
-                {!!doctor.nationality && (
-                    <Text style={styles.info}>Nationality: {doctor.nationality}</Text>
-                )}
-                {doctor.languages && doctor.languages.length > 0 && (
-                    <Text style={styles.info}>Languages: {doctor.languages.join(', ')}</Text>
-                )}
-                {doctor.locations && doctor.locations.length > 0 && (
-                    <Text style={styles.info}>Locations: {doctor.locations.join(', ')}</Text>
-                )}
-                <View style={styles.buttonRow}>
-                    <Text style={styles.bookButton} onPress={() => {/* TODO: Implement booking logic */ }}>
-                        Book Appointment
-                    </Text>
+                    <Ionicons name="person-circle" size={64} color="#2c5aa0" style={{ marginBottom: 12 }} />
+                    <Text style={styles.name}>{doctor.name}</Text>
+                    <Text style={styles.department}>{doctor.department}</Text>
+                    {!!doctor.nationality && (
+                        <Text style={styles.info}>Nationality: {doctor.nationality}</Text>
+                    )}
+                    {doctor.languages && doctor.languages.length > 0 && (
+                        <Text style={styles.info}>Languages: {doctor.languages.join(', ')}</Text>
+                    )}
+                    {doctor.locations && doctor.locations.length > 0 && (
+                        <Text style={styles.info}>Locations: {doctor.locations.join(', ')}</Text>
+                    )}
+                    <View style={styles.buttonRow}>
+                        <Text style={styles.bookButton} onPress={() => {
+                            router.push({
+                                pathname: '/book-appointment',
+                                params: { id: doctor.id },
+                            })
+                        }}>
+                            Book Appointment
+                        </Text>
+                    </View>
                 </View>
-            </View>
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Expertise</Text>
-                <Text style={styles.sectionText}>{doctor.expertise?.join(', ') || 'N/A'}</Text>
-            </View>
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Qualifications</Text>
-                <Text style={styles.sectionText}>{doctor.qualifications?.join(', ') || 'N/A'}</Text>
-            </View>
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Experience</Text>
-                <Text style={styles.sectionText}>{doctor.experiences?.join(', ') || 'N/A'}</Text>
-            </View>
-            </ScrollView>
-        </View>
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Expertise</Text>
+                    <Text style={styles.sectionText}>{doctor.expertise?.join(', ') || 'N/A'}</Text>
+                </View>
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Qualifications</Text>
+                    <Text style={styles.sectionText}>{doctor.qualifications?.join(', ') || 'N/A'}</Text>
+                </View>
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Experience</Text>
+                    <Text style={styles.sectionText}>{doctor.experiences?.join(', ') || 'N/A'}</Text>
+                </View>
+            </ScrollView >
+        </View >
     );
 }
 
