@@ -4,6 +4,7 @@ import { Tabs } from 'expo-router';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import 'react-native-get-random-values';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { ColorValue } from 'react-native';
 import type { Patient } from '../common/types';
 import { getPatient } from '../services/patientService';
 import { EmergencyButton } from '../components/common';
@@ -13,23 +14,23 @@ export const PatientContext = createContext<Patient | null>(null);
 export const usePatient = () => useContext(PatientContext);
 
 // Tab icon components
-function HomeIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
+function HomeIcon({ color, focused }: { readonly color: ColorValue; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />;
 }
 
-function AppointmentsIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
+function AppointmentsIcon({ color, focused }: { readonly color: ColorValue; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'calendar' : 'calendar-outline'} size={24} color={color} />;
 }
 
-function RecordsIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
+function RecordsIcon({ color, focused }: { readonly color: ColorValue; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'document-text' : 'document-text-outline'} size={24} color={color} />;
 }
 
-function MessagesIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
+function MessagesIcon({ color, focused }: { readonly color: ColorValue; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'chatbubbles' : 'chatbubbles-outline'} size={24} color={color} />;
 }
 
-function ProfileIcon({ color, focused }: { readonly color: string; readonly focused: boolean }) {
+function ProfileIcon({ color, focused }: { readonly color: ColorValue; readonly focused: boolean }) {
     return <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={color} />;
 }
 
